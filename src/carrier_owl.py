@@ -43,16 +43,16 @@ def calc_score(abst: str, keywords: dict) -> (float, list):
 
 def search_keyword(
         articles: list, keywords: dict, score_threshold: float
-        ) -> list:
+) -> list:
     results = []
-    
+
     # ヘッドレスモードでブラウザを起動
     options = Options()
     options.add_argument('--headless')
 
     # ブラウザーを起動
     driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
-    
+
     for article in articles:
         url = article['arxiv_url']
         title = article['title']
@@ -65,10 +65,10 @@ def search_keyword(
             # abstract_trans = textwrap.wrap(abstract_trans, 40)  # 40行で改行
             # abstract_trans = '\n'.join(abstract_trans)
             result = Result(
-                    url=url, title=title, abstract=abstract_trans,
-                    score=score, words=hit_keywords)
+                url=url, title=title, abstract=abstract_trans,
+                score=score, words=hit_keywords)
             results.append(result)
-    
+
     # ブラウザ停止
     driver.quit()
     return results
@@ -97,7 +97,7 @@ def send2app(text: str, slack_id: str, line_token: str, teams_id: str, title) ->
 
 def notify(results: list, slack_id: str, line_token: str, teams_id: str) -> None:
     # 通知
-    star = '*'*80
+    star = '*' * 80
     today = datetime.date.today()
     n_articles = len(results)
     text = f'{star}\n \t \t {today}\tnum of articles = {n_articles}\n{star}'
@@ -113,7 +113,7 @@ def notify(results: list, slack_id: str, line_token: str, teams_id: str) -> None
         text = f'\n abstract:'\
                f'\n \t {abstract} \n'\
                f'\n {star}'\
-               f'\n url: {url.replace('abs', 'pdf')}'\
+               f'\n url: {url.replace("abs", "pdf")}'\
                f'\n score: `{score}`'\
                f'\n hit keywords: `{word}`'
 
