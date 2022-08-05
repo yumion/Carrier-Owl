@@ -10,7 +10,9 @@ keywords:
         video object segmentation: 3
         object detection: 3
         video adaptation: 2
+        vision and language: 2
         vision transformer: 1
+        CLIP: 1
         3D CNN: 1
 
 

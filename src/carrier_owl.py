@@ -59,13 +59,13 @@ def search_keyword(
         abstract = article['summary']
         score, hit_keywords = calc_score(abstract, keywords)
         if (score != 0) and (score >= score_threshold):
-            title_trans = get_translated_text('ja', 'en', title, driver)
+            # title_trans = get_translated_text('ja', 'en', title, driver)  # タイトルは翻訳しない
             abstract = abstract.replace('\n', '')
             abstract_trans = get_translated_text('ja', 'en', abstract, driver)
             # abstract_trans = textwrap.wrap(abstract_trans, 40)  # 40行で改行
             # abstract_trans = '\n'.join(abstract_trans)
             result = Result(
-                    url=url, title=title_trans, abstract=abstract_trans,
+                    url=url, title=title, abstract=abstract_trans,
                     score=score, words=hit_keywords)
             results.append(result)
     
@@ -74,7 +74,7 @@ def search_keyword(
     return results
 
 
-def send2app(text: str, slack_id: str, line_token: str, teams_id: str) -> None:
+def send2app(text: str, slack_id: str, line_token: str, teams_id: str, title) -> None:
     # slack
     if slack_id is not None:
         slack = slackweb.Slack(url=slack_id)
@@ -89,6 +89,8 @@ def send2app(text: str, slack_id: str, line_token: str, teams_id: str) -> None:
 
     if teams_id is not None:
         teams = pymsteams.connectorcard(teams_id)
+        text = text.replace('\n', '</br>')  # teamsでは\nだけでは改行されないので、hthmlタグにする
+        teams.title(title)
         teams.text(text)
         teams.send()
 
@@ -108,15 +110,14 @@ def notify(results: list, slack_id: str, line_token: str, teams_id: str) -> None
         word = result.words
         score = result.score
 
-        text = f'\n score: `{score}`'\
-               f'\n hit keywords: `{word}`'\
-               f'\n url: {url}'\
-               f'\n title:    {title}'\
-               f'\n abstract:'\
-               f'\n \t {abstract}'\
-               f'\n {star}'
+        text = f'\n abstract:'\
+               f'\n \t {abstract} \n'\
+               f'\n {star}'\
+               f'\n url: {url.replace('abs', 'pdf')}'\
+               f'\n score: `{score}`'\
+               f'\n hit keywords: `{word}`'
 
-        send2app(text, slack_id, line_token, teams_id)
+        send2app(text, slack_id, line_token, teams_id, title)
 
 
 def get_translated_text(from_lang: str, to_lang: str, from_text: str, driver) -> str:
@@ -149,6 +150,7 @@ def get_translated_text(from_lang: str, to_lang: str, from_text: str, driver) ->
         return urllib.parse.unquote(from_text)
     return to_text
 
+
 def get_text_from_driver(driver) -> str:
     try:
         elem = driver.find_element_by_class_name('lmt__translations_as_text__text_btn')
@@ -156,6 +158,7 @@ def get_text_from_driver(driver) -> str:
         return None
     text = elem.get_attribute('innerHTML')
     return text
+
 
 def get_text_from_page_source(html: str) -> str:
     soup = BeautifulSoup(html, features='lxml')
