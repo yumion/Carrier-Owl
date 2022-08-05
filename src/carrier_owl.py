@@ -74,7 +74,7 @@ def search_keyword(
     return results
 
 
-def send2app(text: str, slack_id: str, line_token: str, teams_id: str, title) -> None:
+def send2app(text: str, slack_id: str, line_token: str, teams_id: str, title=None) -> None:
     # slack
     if slack_id is not None:
         slack = slackweb.Slack(url=slack_id)
@@ -90,7 +90,8 @@ def send2app(text: str, slack_id: str, line_token: str, teams_id: str, title) ->
     if teams_id is not None:
         teams = pymsteams.connectorcard(teams_id)
         text = text.replace('\n', '</br>')  # teamsでは\nだけでは改行されないので、hthmlタグにする
-        teams.title(title)
+        if title is not None:
+            teams.title(title)
         teams.text(text)
         teams.send()
 
