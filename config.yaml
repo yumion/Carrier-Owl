@@ -1,11 +1,18 @@
 # arxivの学問領域の指定
-subject: 'cat:cs.*'
+subject: 'cat:cs.AI OR cat:cs.CV OR cat:cs.CL OR cat:cs.LG OR cat:stat.ML'
 
 # 検索キーワード
 keywords:
-        kaggle: 3
-        resnet: 3
-        anomaly detection: 1
+        medical image: 3
+        segmentation: 3
+        semantic segmentation: 3
+        instance segmentation: 3
+        video object segmentation: 3
+        object detection: 3
+        video adaptation: 2
+        vision transformer: 1
+        3D CNN: 1
+
 
 # 通知の閾値
 score_threshold: 0
