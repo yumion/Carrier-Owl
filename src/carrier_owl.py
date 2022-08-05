@@ -74,7 +74,7 @@ def search_keyword(
     return results
 
 
-def send2app(text: str, slack_id: str, line_token: str, teams_id: str, is_title: bool = False) -> None:
+def send2app(text: str, slack_id: str, line_token: str, teams_id: str) -> None:
     # slack
     if slack_id is not None:
         slack = slackweb.Slack(url=slack_id)
@@ -88,12 +88,9 @@ def send2app(text: str, slack_id: str, line_token: str, teams_id: str, is_title:
         requests.post(line_notify_api, headers=headers, data=data)
 
     if teams_id is not None:
-        sender = pymsteams.connectorcard(teams_id)
-        if is_title:
-            sender.title(text)
-        else:
-            sender.text(text)
-        sender.send()
+        teams = pymsteams.connectorcard(teams_id)
+        teams.text(text)
+        teams.send()
 
 
 def notify(results: list, slack_id: str, line_token: str, teams_id: str) -> None:
@@ -102,7 +99,7 @@ def notify(results: list, slack_id: str, line_token: str, teams_id: str) -> None
     today = datetime.date.today()
     n_articles = len(results)
     text = f'{star}\n \t \t {today}\tnum of articles = {n_articles}\n{star}'
-    send2app(text, slack_id, line_token, teams_id, is_title=True)
+    send2app(text, slack_id, line_token, teams_id)
     # descending
     for result in sorted(results, reverse=True, key=lambda x: x.score):
         url = result.url
@@ -119,7 +116,7 @@ def notify(results: list, slack_id: str, line_token: str, teams_id: str) -> None
                f'\n \t {abstract}'\
                f'\n {star}'
 
-        send2app(text, slack_id, line_token, teams_id, is_title=False)
+        send2app(text, slack_id, line_token, teams_id)
 
 
 def get_translated_text(from_lang: str, to_lang: str, from_text: str, driver) -> str:
@@ -201,11 +198,9 @@ def main():
                            iterative=False)
     results = search_keyword(articles, keywords, score_threshold)
 
-    print(results)
     slack_id = os.getenv("SLACK_ID") or args.slack_id
     line_token = os.getenv("LINE_TOKEN") or args.line_token
     teams_id = os.getenv("TEAMS_ID") or args.teams_id
-    print('TEAMS_ID: ', teams_id)
     notify(results, slack_id, line_token, teams_id)
 
 
