@@ -204,6 +204,7 @@ def main():
     slack_id = os.getenv("SLACK_ID") or args.slack_id
     line_token = os.getenv("LINE_TOKEN") or args.line_token
     teams_id = os.getenv("TEANS_ID") or args.teams_id
+    print('TEANS_ID: ', teams_id)
     notify(results, slack_id, line_token, teams_id)
 
 
