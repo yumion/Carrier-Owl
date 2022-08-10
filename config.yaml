@@ -4,7 +4,9 @@ subject: 'cat:cs.AI OR cat:cs.CV OR cat:cs.CL OR cat:cs.LG OR cat:stat.ML'
 # 検索キーワード
 keywords:
         medical image: 3
-        segmentation: 3
+        laparoscopic: 3
+        endoscopic: 3
+        segmentation: 1
         semantic segmentation: 3
         instance segmentation: 3
         video object segmentation: 3
