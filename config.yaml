@@ -1,11 +1,11 @@
 # arxivの学問領域の指定
-subject: 'cat:cs.AI OR cat:cs.CV OR cat:cs.CL OR cat:cs.LG OR cat:stat.ML'
+subject: 'cat:cs.AI OR cat:cs.CV OR cat:cs.CL OR cat:cs.LG OR cat:stat.ML OR cat:eess.IV'
 
 # 検索キーワード
 keywords:
         medical image: 3
-        laparoscopic: 3
-        endoscopic: 3
+        laparoscopic: 2
+        endoscopic: 2
         segmentation: 1
         semantic segmentation: 3
         instance segmentation: 3
@@ -16,6 +16,8 @@ keywords:
         vision transformer: 1
         CLIP: 1
         3D CNN: 1
+        class imbalance: 2
+        long-tail: 2
 
 
 # 通知の閾値
