@@ -19,7 +19,7 @@ keywords:
         class imbalance: 2
         long-tail: 2
         active learning: 3
-
+        self-supervised: 2
 
 # 通知の閾値
 score_threshold: 0
