@@ -9,6 +9,8 @@ on:
   push:
     branches:
       - test-send-to-slack
+    branches-ignore:
+      - '**'
 
 jobs:
   ci:
